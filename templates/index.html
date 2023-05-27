@@ -1,0 +1,27 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Index</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-light bg-warning">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='logo.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+            LitrãoSearcher
+        </a>
+        <form action="{{ url_for('logout') }}" method="POST" class="ml-auto">
+            <input type="submit" value="Logout" class="btn btn-danger">
+        </form>
+    </nav>
+
+    <div class="container">
+        <h1>Hello, World!</h1>
+        <p>Username: {{ username }}!!!</p>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

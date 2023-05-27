@@ -1,0 +1,17 @@
+body {
+    background-color: #FFFFE0; /* Amarelo claro */
+    color: #000000; /* Preto */
+}
+
+.container {
+    margin-top: 50px;
+}
+
+.navbar {
+    padding: 10px 20px;
+}
+
+.navbar-brand {
+    color: #000000; /* Preto */
+    font-weight: bold;
+}
