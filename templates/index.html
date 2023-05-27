@@ -1,10 +1,16 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>Index</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css">
+    <style>
+        #map {
+            margin: 5px;
+            height: 400px;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-light bg-warning">
@@ -12,16 +18,63 @@
             <img src="{{ url_for('static', filename='logo.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
             LitrãoSearcher
         </a>
-        <form action="{{ url_for('logout') }}" method="POST" class="ml-auto">
+        <div class="ml-auto">
+            <a href="#" class="btn btn-dark mr-1">Home</a>
+            <a href="#" class="btn btn-dark mr-3">Profile</a>
+        </div>
+        <form action="{{ url_for('logout') }}" method="POST">
             <input type="submit" value="Logout" class="btn btn-danger">
         </form>
     </nav>
 
-    <div class="container">
-        <h1>Hello, World!</h1>
-        <p>Username: {{ username }}!!!</p>
+    <div class="container">        
+        <p>Olá {{ username }}!!!</p>
     </div>
 
+    <div class="main_map" id="map"></div>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+      var map = L.map('map').setView([-25.4294, -49.2719], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    maxZoom: 18
+}).addTo(map);
+
+map.on('click', function(e) {
+    var popupContent = `
+        <form id="popup-form">
+            <label for="establishment-name">Nome do estabelecimento:</label>
+            <input type="text" id="establishment-name" required><br><br>
+            <label for="characteristics">Características:</label>
+            <textarea id="characteristics" required></textarea><br><br>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="button" class="btn btn-secondary" onclick="map.closePopup()">Cancelar</button>
+        </form>
+    `;
+    
+    var popup = L.popup()
+        .setLatLng(e.latlng)
+        .setContent(popupContent)
+        .openOn(map);
+        
+    L.DomEvent.on(L.DomUtil.get('popup-form'), 'submit', function(event) {
+        event.preventDefault();
+        
+        var establishmentName = document.getElementById('establishment-name').value;
+        var characteristics = document.getElementById('characteristics').value;
+        var username = "{{ username }}";
+
+        var marker = L.marker(e.latlng)
+        .bindPopup(`<b>${establishmentName}</b><br>${characteristics}<br>Postado por ${username}`)
+            .addTo(map);
+            
+        map.closePopup();
+    });
+});
+    </script>
+    
 </body>
 </html>
