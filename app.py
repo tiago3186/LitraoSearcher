@@ -1,18 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import os
+from models.models import db, User, Pub
 
 app = Flask(__name__)
 
 app.secret_key = '87144798'
 
-# Configuração do caminho para a pasta "templates"
-template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-app.template_folder = template_dir
+# Configuração do banco de dados
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Quadrado86?@localhost/litraosearcher'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Estrutura de dados temporária para armazenar pares de login e senha
-users = {
-    'admin': 'admin'
-}
+# Inicialize o objeto SQLAlchemy com o aplicativo Flask
+db.init_app(app)
 
 @app.route('/index/', methods=['GET', 'POST'])
 def index():
@@ -20,10 +18,14 @@ def index():
         username = request.form['username']
         password = request.form['password']
 
-        # Verifica se o par login/senha existe na estrutura de dados
-        if username in users and users[username] == password:
+        # Consulta o banco de dados para verificar se o usuário existe e a senha está correta
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
             session['username'] = username  # Armazena o nome de usuário na sessão
             return redirect(url_for('index'))  # Redireciona para a rota '/index/' usando o método GET
+        else:
+            error_message = "Usuário e/ou senha inválidos."
+            return render_template('login.html', error_message=error_message)
 
     # Renderiza a página de login se o login falhar ou se for uma solicitação GET
     return render_template('index.html', username=session.get('username'))
@@ -38,8 +40,9 @@ def home():
         username = request.form['username']
         password = request.form['password']
 
-        # Verifica se o par login/senha existe na estrutura de dados
-        if username in users and users[username] == password:
+        # Consulta o banco de dados para verificar se o usuário existe e a senha está correta
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
             session['username'] = username  # Armazena o nome de usuário na sessão
             return redirect(url_for('index'))  # Redireciona para a rota '/index/' se o login for bem-sucedido
 

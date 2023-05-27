@@ -16,6 +16,11 @@
 
     <div class="container">
         <h1>Login</h1>
+        {% if error_message %}
+        <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+        </div>
+        {% endif %}
         <form method="POST" action="/index">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required><br><br>
