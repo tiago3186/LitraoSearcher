@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from models.models import db, User, Pub
 
 app = Flask(__name__)
@@ -22,13 +22,12 @@ def index():
         user = User.query.filter_by(username=username).first()
         if user and user.password == password:
             session['username'] = username  # Armazena o nome de usuário na sessão
-            return redirect(url_for('index'))  # Redireciona para a rota '/index/' usando o método GET
-        else:
-            error_message = "Usuário e/ou senha inválidos."
-            return render_template('login.html', error_message=error_message)
 
-    # Renderiza a página de login se o login falhar ou se for uma solicitação GET
-    return render_template('index.html', username=session.get('username'))
+    # Recupera todos os marcadores da tabela "pub"
+    markers = Pub.query.all()
+
+    # Renderiza a página de index.html passando os marcadores como uma variável
+    return render_template('index.html', username=session.get('username'), markers=markers)
 
 @app.route('/')
 def home():
@@ -47,6 +46,44 @@ def home():
             return redirect(url_for('index'))  # Redireciona para a rota '/index/' se o login for bem-sucedido
 
     return render_template('login.html')  # Renderiza a página de login se ainda não estiver logado
+
+@app.route('/add_pub', methods=['POST'])
+def add_pub():
+    if 'username' not in session:
+        return redirect(url_for('home'))  # Redireciona se o usuário não estiver logado
+
+    # Obtém os dados do formulário
+    pubname = request.form['pubname']
+    description = request.form['description']
+    latitude = request.form['latitude']
+    longitude = request.form['longitude']
+    user = session['username']
+
+    # Cria um novo objeto Pub
+    pub = Pub(pubname=pubname, description=description, latitude=latitude, longitude=longitude, user=user)
+
+    # Adiciona o objeto Pub ao banco de dados
+    db.session.add(pub)
+    db.session.commit()
+
+    return redirect(url_for('index'))
+
+@app.route('/get_markers', methods=['GET'])
+def get_markers():
+    markers = Pub.query.all()
+    marker_list = []
+
+    for marker in markers:
+        marker_data = {
+            'pubname': marker.pubname,
+            'description': marker.description,
+            'latitude': marker.latitude,
+            'longitude': marker.longitude,
+            'user': marker.user
+        }
+        marker_list.append(marker_data)
+
+    return jsonify(marker_list)
 
 @app.route('/logout', methods=['POST'])
 def logout():

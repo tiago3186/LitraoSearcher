@@ -36,45 +36,104 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-      var map = L.map('map').setView([-25.4294, -49.2719], 13);
+        var map = L.map('map').setView([-25.4294, -49.2719], 13);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-    maxZoom: 18
-}).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18
+        }).addTo(map);
 
-map.on('click', function(e) {
-    var popupContent = `
-        <form id="popup-form">
-            <label for="establishment-name">Nome do estabelecimento:</label>
-            <input type="text" id="establishment-name" required><br><br>
-            <label for="characteristics">Características:</label>
-            <textarea id="characteristics" required></textarea><br><br>
-            <button type="submit" class="btn btn-primary">Salvar</button>
-            <button type="button" class="btn btn-secondary" onclick="map.closePopup()">Cancelar</button>
-        </form>
-    `;
-    
-    var popup = L.popup()
-        .setLatLng(e.latlng)
-        .setContent(popupContent)
-        .openOn(map);
-        
-    L.DomEvent.on(L.DomUtil.get('popup-form'), 'submit', function(event) {
-        event.preventDefault();
-        
-        var establishmentName = document.getElementById('establishment-name').value;
-        var characteristics = document.getElementById('characteristics').value;
-        var username = "{{ username }}";
+        // Function to load markers on the map
+        function loadMarkers(markers) {
+            for (var i = 0; i < markers.length; i++) {
+                var marker = markers[i];
+                var markerContent = `<b>${marker.pubname}</b><br>${marker.description}<br>Postado por ${marker.user}`;
 
-        var marker = L.marker(e.latlng)
-        .bindPopup(`<b>${establishmentName}</b><br>${characteristics}<br>Postado por ${username}`)
-            .addTo(map);
-            
-        map.closePopup();
-    });
-});
+                L.marker([marker.latitude, marker.longitude])
+                    .bindPopup(markerContent)
+                    .addTo(map);
+            }
+        }
+
+        // Function to fetch markers from the server
+        function fetchMarkers() {
+            fetch('/get_markers')
+                .then(function(response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Erro ao carregar os marcadores do servidor.');
+                    }
+                })
+                .then(function(data) {
+                    loadMarkers(data);
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
+        }
+
+        map.on('click', function(e) {
+            var popupContent = `
+                <form id="popup-form">
+                    <label for="pubname">Nome do estabelecimento:</label>
+                    <input type="text" id="pubname" required><br><br>
+                    <label for="description">Características:</label>
+                    <textarea id="description" required></textarea><br><br>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-secondary" onclick="map.closePopup()">Cancelar</button>
+                </form>
+            `;
+
+            var popup = L.popup()
+                .setLatLng(e.latlng)
+                .setContent(popupContent)
+                .openOn(map);
+
+            L.DomEvent.on(L.DomUtil.get('popup-form'), 'submit', function(event) {
+                event.preventDefault();
+
+                var pubName = document.getElementById('pubname').value;
+                var description = document.getElementById('description').value;
+                var latitude = e.latlng.lat;
+                var longitude = e.latlng.lng;
+
+                // Create a FormData object to send the form data to the server
+                var formData = new FormData();
+                formData.append('pubname', pubName);
+                formData.append('description', description);
+                formData.append('latitude', latitude);
+                formData.append('longitude', longitude);
+
+                // Make a POST request to the '/add_pub' route with the form data
+                fetch('/add_pub', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(function(response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Erro ao adicionar a publicação.');
+                    }
+                })
+                .then(function(data) {
+                    var markerContent = `<b>${pubName}</b><br>${description}<br>Postado por ${data.user}`;
+
+                    L.marker([latitude, longitude])
+                        .bindPopup(markerContent)
+                        .addTo(map);
+
+                    map.closePopup();
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
+            });
+        });
+
+        // Fetch markers when the page is loaded
+        fetchMarkers();
     </script>
-    
 </body>
 </html>
