@@ -9,3 +9,6 @@ Uma aplicação Flask para pesquisa e compartilhamento de informações sobre li
 
 - O marcador depois fica pra ser visualizado  
 ![image](https://github.com/tiago3186/LitraoSearcher/assets/132753395/cfe54718-b89c-4d84-b0db-eb8cfeb5ab0f)
+
+- busca se existe esse usuario e senha no banco de dados MySQL e caso não exista retorna um erro  
+![image](https://github.com/tiago3186/LitraoSearcher/assets/132753395/1f6fe6a2-74b5-414e-8bff-cb8450cdf6db)
