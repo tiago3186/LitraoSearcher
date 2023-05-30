@@ -106,25 +106,29 @@
                 formData.append('longitude', longitude);
 
                 // Make a POST request to the '/add_pub' route with the form data
+                map.closePopup();
+                
+                location.reload();
+
                 fetch('/add_pub', {
                     method: 'POST',
                     body: formData
-                })
+                })                
                 .then(function(response) {
                     if (response.ok) {
                         return response.json();
                     } else {
                         throw new Error('Erro ao adicionar a publicação.');
                     }
-                })
-                .then(function(data) {
+                })                
+                .then(function(data) {                    
+
                     var markerContent = `<b>${pubName}</b><br>${description}<br>Postado por ${data.user}`;
 
                     L.marker([latitude, longitude])
                         .bindPopup(markerContent)
-                        .addTo(map);
-
-                    map.closePopup();
+                        .addTo(map);                     
+                   
                 })
                 .catch(function(error) {
                     console.error(error);
