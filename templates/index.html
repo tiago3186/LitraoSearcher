@@ -108,7 +108,11 @@
                 // Make a POST request to the '/add_pub' route with the form data
                 map.closePopup();
                 
+                setTimeout(function() {
                 location.reload();
+                }, 500); // 3000 milissegundos = 3 segundos
+
+                alert("Buteco adicionado com sucesso!");
 
                 fetch('/add_pub', {
                     method: 'POST',
