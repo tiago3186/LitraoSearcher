@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/39eb804e-514a-45fc-9898-359fcc6e65b8/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/LitraoSearcher",
+    "appService.deploySubpath": "."
+}
