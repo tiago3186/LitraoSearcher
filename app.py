@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, __version__
 from models.models import db, User, Pub
 
 app = Flask(__name__)
+print(__version__)
 
 app.secret_key = '87144798'
 
