@@ -11,7 +11,7 @@ print(__version__)
 app.secret_key = os.getenv('app_secret_key')
 
 # Configuração do banco de dados
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{os.getenv('username')}:{os.getenv('password')}@{os.getenv('hostname')}/litraosearcher?ssl-mode=require"
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{os.getenv('username')}:{os.getenv('password')}@{os.getenv('hostname')}/litraosearcher?sslmode=require"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicialize o objeto SQLAlchemy com o aplicativo Flask
