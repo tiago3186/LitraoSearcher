@@ -1,13 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, __version__
 from models.models import db, User, Pub
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
 print(__version__)
 
-app.secret_key = '87144798'
+app.secret_key = os.getenv('app_secret_key')
 
 # Configuração do banco de dados
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Quadrado86?@localhost/litraosearcher'
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{os.getenv('username')}:{os.getenv('password')}@{os.getenv('hostname')}/litraosearcher?ssl-mode=require"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicialize o objeto SQLAlchemy com o aplicativo Flask
