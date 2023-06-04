@@ -3,7 +3,7 @@ Uma aplicação Flask para pesquisa e compartilhamento de informações sobre li
 
 Existe uma versão subida na Azure: https://litraosearcher.azurewebsites.net/  
 
-Mas a última mais estável com tudo funcional ainda é a da branch develop, que você pode clonar e rodar localmente  
+Porém pra conseguir ver tudo rodando do jeito correto ainda só localmente, daí você pode clonar e rodar localmente  
 
 
 ![image](https://github.com/tiago3186/LitraoSearcher/assets/132753395/dad46a5a-e3b3-4989-b44e-e61b300b2a06)
