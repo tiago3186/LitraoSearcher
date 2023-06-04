@@ -18,3 +18,6 @@ A última versão mais estável de produção é: https://litraosearcher.azurewe
 
 - Os dados dos bares e posição dos marcadores são salvos no banco MySQL, de modo que qualquer usuário consegue ver o que qualquer outro usuário tenha marcado  
 ![image](https://github.com/tiago3186/LitraoSearcher/assets/132753395/4ac0576b-3931-437d-b593-203b5a23c0d4)
+
+### O que estou fazendo agora
+- Configurando as variáveis de ambiente na Azure para que o MySQL se comporte adequadamente
