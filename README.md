@@ -1,6 +1,12 @@
 ## LitraoSearcher
 Uma aplicação Flask para pesquisa e compartilhamento de informações sobre litrão e butecos bons e baratos. Usa a API OpenStreetMap para renderizar mapas.  
 
+Para rodar localmente, baixe esse repositório e instale as dependências.  
+Em seguida, configure suas variáveis de ambiente locais e crie um banco de dados MySQL e as tabelas conforme o models.py.  
+Rode a aplicação e be happy.
+
+Atualmente estou subindo uma versão de produção na Azure, disponível em breve.  
+
 ![image](https://github.com/tiago3186/LitraoSearcher/assets/132753395/dad46a5a-e3b3-4989-b44e-e61b300b2a06)
 
 ### Features atuais
