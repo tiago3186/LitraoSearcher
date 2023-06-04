@@ -3,7 +3,7 @@ Uma aplicação Flask para pesquisa e compartilhamento de informações sobre li
 
 Para rodar localmente, baixe esse repositório e instale as dependências.  
 Em seguida, configure suas variáveis de ambiente locais e crie um banco de dados MySQL e as tabelas conforme o models.py.  
-Crie um usuário e senha de padrão dando um INSERT, rode a aplicação e be happy.
+Crie um usuário e senha de padrão (ou mais de um se quiser) dando um INSERT, rode a aplicação e be happy.
 
 Atualmente estou subindo uma versão de produção na Azure, disponível em breve.  
 
