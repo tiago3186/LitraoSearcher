@@ -5,7 +5,7 @@ Para rodar localmente, baixe esse repositório e instale as dependências.
 Em seguida, configure suas variáveis de ambiente locais e crie um banco de dados MySQL e as tabelas conforme o models.py.  
 Crie um usuário e senha de padrão (ou mais de um se quiser) dando um INSERT, rode a aplicação e be happy.
 
-Atualmente estou subindo uma versão de produção na Azure, disponível em breve.  
+Atualmente estou subindo uma versão que seria mais de produção na Azure, disponível em breve.  
 
 ![image](https://github.com/tiago3186/LitraoSearcher/assets/132753395/dad46a5a-e3b3-4989-b44e-e61b300b2a06)
 
